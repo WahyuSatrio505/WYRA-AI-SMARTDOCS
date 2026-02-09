@@ -1,0 +1,175 @@
+1. alur logika folder ini :
+
+smartdocs/
+├── backend/
+│   ├── app/
+│   │   ├── api/                 # FastAPI routes
+│   │   │   ├── upload.py
+│   │   │   └── chat.py
+│   │   │
+│   │   ├── core/                # Konfigurasi & dependency
+│   │   │   ├── config.py
+│   │   │   └── ollama.py
+│   │   │
+│   │   ├── rag/                 # 🔥 JANTUNG PROYEK
+│   │   │   ├── ingestion.py     # PDF → chunks → embedding
+│   │   │   ├── retriever.py     # semantic search
+│   │   │   ├── generator.py     # prompt + LLM
+│   │   │   └── prompts.py
+│   │   │
+│   │   ├── loaders/             # PDF, DOCX, Excel
+│   │   │   ├── pdf_loader.py
+│   │   │   ├── docx_loader.py
+│   │   │   └── excel_loader.py
+│   │   │
+│   │   └── main.py
+│   │
+│   └── requirements.txt
+│
+├── storage/
+│   ├── raw_docs/                # PDF asli
+│   ├── processed_docs/          # chunks (optional)
+│   └── vectordb/                # Chroma/Qdrant
+│
+├── frontend/
+│
+├── docker-compose.yml
+└── README.md
+
+
+2. tools project ini :
+
+Format,Library Rekomendasi,Alasan
+PDF,PyMuPDF (fitz) atau PyPDF2,Sangat cepat dan stabil untuk ekstraksi teks di Linux/Ubuntu.
+DOCX,python-docx,Standar industri untuk membaca struktur dokumen Word.
+Excel,pandas + openpyxl,AI kesulitan membaca Excel secara mentah. Kamu butuh Pandas untuk mengubah tabel Excel menjadi format Markdown atau String agar AI paham baris dan kolomnya.
+Orchestrator,LangChain,"Ini ""lem"" yang akan menghubungkan dokumenmu dengan Ollama
+
+
+3. Judul: Inisialisasi Tahap 1 - Document Reader (PDF & DOCX) Tanggal: 24 Desember 2025
+
+        Fokus Utama: Implementasi fitur Ingestion (pembacaan dan penyimpanan dokumen) secara lokal dan offline.
+
+        Tech Stack Awal: > * Backend: FastAPI (Python 3.10+).
+
+            Parser: PyMuPDF (PDF) & python-docx (DOCX).
+
+            Vector Store: ChromaDB (sebagai "otak" penyimpanan memori dokumen).
+
+        Konsep Penting: AI tidak membaca dokumen secara utuh setiap kali ditanya, melainkan mencari potongan teks (chunks) yang relevan di Vector Database, lalu merangkumnya menggunakan Ollama (RAG Workflow).
+
+        Prioritas Keamanan: Semua data tetap berada di localhost/Docker untuk memenuhi standar GDPR perusahaan.
+
+        Catatan Arsitektur: Struktur folder harus modular (memisahkan services/ dokumen) agar fitur "Baca Foto" atau "Excel" bisa ditambahkan kemudian tanpa merusak kode utama.
+
+
+4.Judul: Verifikasi Environment & Persiapan Ingestion Tanggal: 24 Desember 2025 (Siang)
+
+    Verifikasi Library: Semua library utama (fastapi, langchain, chromadb, fitz, docx) telah berhasil diinstal dan diverifikasi melalui import Python.
+
+    Koreksi Library Word: Library python-docx dipanggil menggunakan perintah import docx, bukan docsx.
+
+    Kesiapan Database: chromadb siap digunakan sebagai mesin pencari semantik lokal di folder storage/vectordb/.
+
+    Status Terakhir: Struktur folder sudah siap (Modular), environment sudah siap. Langkah selanjutnya adalah membangun logika masuknya data (Ingestion Pipeline).
+
+
+5.  Judul: Roadmap Implementasi Backend - SmartDocs Tanggal: 24 Desember 2025
+
+    Struktur Folder: Menggunakan arsitektur modular (API, Core, RAG, Loaders) untuk memudahkan penggabungan fitur (Chat/Foto) di masa depan.
+
+    Database Vektor: Diputuskan menggunakan ChromaDB dengan penyimpanan tetap pada folder storage/vectordb/.
+
+    Tahapan Pertama (Loaders): Memulai dengan pdf_loader.py menggunakan library PyMuPDF (fitz) untuk ekstraksi teks tercepat.
+
+    Alur Kerja Awal: Loader -> Text Extraction -> Ingestion (Chunking & Embedding) -> ChromaDB.
+
+    Status Tools: Library FastAPI, LangChain, dan ChromaDB telah terinstal.
+
+    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ------
+
+
+    LAPORAN PROGRES HARIAN: SMARTDOCS (THE MILESTONE)
+
+Tanggal: 25 Desember 2025 (Pagi - Siang) Status Proyek: Fase Ingestion Selesai (Berhasil)
+1. Pencapaian Teknis Hari Ini
+
+    Modularitas Folder: Struktur folder backend telah diatur secara profesional (Lapis API, Core, Loaders, dan RAG).
+
+    Sukses Load Dokumen: File pdf_loader.py berhasil mengekstrak teks dari PDF menggunakan library PyMuPDF (fitz).
+
+    Sistem Ingestion: Berhasil membangun rag/ingestion.py yang melakukan chunking otomatis (memecah teks menjadi potongan kecil agar AI tidak lupa konteks).
+
+    Vector Database: ChromaDB resmi berjalan secara lokal di folder storage/vectordb/. Ini adalah "otak" permanen SmartDocs.
+
+    First Blood (Uji Coba Pertama): Berhasil memasukkan 12 potongan data dari file wahyu-202422004-jarkom.pdf ke dalam database vektor.
+
+2. Keputusan Arsitektur Penting
+
+    Embedding Model: Diputuskan untuk beralih dari llama3.2 ke nomic-embed-text untuk proses embedding.
+
+        Alasan: Lebih ringan di CPU dan jauh lebih akurat untuk pencarian dokumen dibandingkan menggunakan model bahasa umum.
+
+    Library Update: Menggunakan langchain-ollama (versi terbaru) untuk menggantikan library lama yang sudah deprecated guna menghindari error di masa depan.
+
+    Reset Prosedur: Wahyu memahami bahwa jika model embedding diganti, folder storage/vectordb/ harus dibersihkan (reset) agar database sinkron dengan model baru.
+
+    ... .. .. .. 
+    Model Baru: Berhasil mengunduh nomic-embed-text via Ollama.
+
+Sifat Penyimpanan: Persisten (Permanen). Tidak perlu mengunduh ulang saat terminal atau komputer dimatikan.
+
+Kesiapan Sistem: Sistem siap melakukan re-indexing (memasukkan ulang dokumen) menggunakan model embedding yang lebih efisien dan akurat di sesi berikutnya
+
+8.    1️⃣ OLLAMA HARUS JALAN (PALING PENTING)
+
+Kalau Ollama mati → embedding = mati gaya ❌
+
+🔎 Cek cepat:
+ollama list
+
+
+Kalau muncul daftar model → AMAN ✅
+
+Kalau error → hidupkan dulu:
+
+ollama serve
+
+9. 🧾 APA SAJA YANG PERLU DI-RUN (FINAL VERSION)
+🔹 1️⃣ INGEST DOKUMEN (sekali per dokumen)
+python3 backend/app/main.py
+
+scan storage/raw_docs
+
+ingest SEMUA PDF/DOCX
+
+tanpa perlu tulis nama file
+
+🔥 Ini sudah kamu benerin → DESAIN TEPAT
+
+10. 🔹 2️⃣ JALANKAN API (HANYA KALAU MAU CHAT)
+python3 -m uvicorn main:app --app-dir backend/app --reload
+
+
+Akses:
+
+http://127.0.0.1:8000
+
+nanti: /chat, /docs, dll
+
+📌 Kalau nggak chatting → matiin aja
+
+
+doneee hari ini minggu 18 januari
+
+JUDUL: KELAHIRAN SMARTDOCS V1.0 (SUCCESSFUL RAG INTEGRATION) > Tanggal: 18 Januari 2026
+
+    Integrasi Fullstack: Berhasil menghubungkan Frontend (HTML/JS) ke Backend FastAPI.
+
+    Kestabilan RAG: > * Retriever berhasil menggunakan nomic-embed-text tanpa skor negatif.
+
+        Generator berhasil menggunakan llama3.2 untuk menyusun jawaban.
+
+    Hasil Pengujian: AI mampu mengenali konteks dokumen (Lagu "About You") dan merespons via UI WYRA.
+
+    Catatan Hardware: Ditemukan bottleneck performa pada CPU i3/8GB RAM; disarankan optimasi resource atau upgrade hardware di masa mendatang.
