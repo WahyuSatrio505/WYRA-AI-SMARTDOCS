@@ -1,4 +1,5 @@
-# <align="center"> 🤖 WYRA AI - SMART DOCS v1.0 </p>
+<h1 align="center"> 🤖 WYRA AI - SMART DOCS v1.0 </h1>
+
 <p align="center">
   <img src="https://capsule-render.vercel.app/render?type=soft&color=auto&height=200&section=header&text=WYRA%20SMART%20DOCS&fontSize=70&animation=fadeIn" />
 </p>
