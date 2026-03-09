@@ -37,3 +37,18 @@
    ```bash
    git clone [https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git](https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git)
    cd WYRA-AI-SMARTDOCS
+
+   2. **Siapkan "Otak" AI (Ollama)**
+   Karena SmartDocs berjalan 100% lokal, pastikan Ollama sudah aktif di sistem kamu.
+   ```bash
+   ollama run llama3.2
+   
+   3. Bungkus & Rakit Kontainer Docker (Build)
+   docker build -t smartdocs-api .
+
+   4. nyalakan mesinyaa..!!
+   docker run -p 8000:8000 --network="host" smartdocs-api
+
+   5. verivikasi API
+   http://127.0.0.1:8000.
+   dan muncul pesan    {"status": "SmartDocs API sudah berjalan 🚀"}
