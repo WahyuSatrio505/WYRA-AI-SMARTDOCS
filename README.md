@@ -38,7 +38,7 @@
    git clone [https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git](https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git)
    cd WYRA-AI-SMARTDOCS
 
-   2. **Siapkan "Otak" AI (Ollama)**
+   2. Siapkan "Otak" AI (Ollama)
    Karena SmartDocs berjalan 100% lokal, pastikan Ollama sudah aktif di sistem kamu.
    ```bash
    ollama run llama3.2
