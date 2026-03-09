@@ -1,6 +1,6 @@
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from rag.retriever import get_relevant_context, format_context
+from backend.app.rag.retriever import get_relevant_context, format_context
 
 def generate_answer(query: str):
 

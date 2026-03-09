@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.chat import router as chat_router
+from backend.app.api.chat import router as chat_router
 
 # Inisialisasi FastAPI
 app = FastAPI(title="SmartDocs API", version="1.0.0")

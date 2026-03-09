@@ -14,9 +14,12 @@ def get_relevant_context(query: str):
         collection_name="smartdocs_collection"
     )
     
-    # Gunakan similarity_search biasa untuk menghindari skor negatif
     docs = db.similarity_search(query, k=3)
-    
+
+    print("=== DEBUG RETRIEVED DOCS ===")
+    print(docs)
+    print("============================")
+
     if not docs:
         print("⚠️ Tidak ditemukan konteks yang relevan.")
         return None

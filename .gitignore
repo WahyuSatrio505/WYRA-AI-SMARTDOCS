@@ -1,0 +1,11 @@
+# Mengabaikan environment dan cache
+venv/
+__pycache__/
+*.pyc
+
+# Mengabaikan database dan storage lokal AI
+storage/
+chroma.sqlite3
+
+# Mengabaikan environment variables rahasia (jika ada)
+.env

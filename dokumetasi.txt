@@ -39,6 +39,52 @@ smartdocs/
 
 2. tools project ini :
 
+1. Artificial Intelligence & RAG Stack
+
+Ini adalah inti dari kecerdasan SmartDocs kamu:
+
+    LangChain: Sebagai framework utama untuk menghubungkan model AI dengan data PDF-mu.
+
+    Ollama: Tools yang kamu gunakan untuk menjalankan LLM (seperti Llama 3.2) secara lokal tanpa internet.
+
+    ChromaDB (Vector Database): Tempat kamu menyimpan "ingatan" dokumen PDF agar bisa dicari dengan cepat oleh AI.
+
+    Nomic Embed Text: Model khusus yang kamu gunakan untuk mengubah teks dokumen menjadi angka (vector) agar dipahami mesin.
+
+2. Software Development & Backend
+
+Teknologi yang membangun tulang punggung aplikasi kamu:
+
+    FastAPI: Framework Python super cepat yang kamu gunakan untuk membuat endpoint API backend.
+
+    Python: Bahasa pemrograman utama yang menyatukan seluruh logika AI dan backend.
+
+    Uvicorn: Server yang menjalankan aplikasi FastAPI kamu di port 8000.
+
+    JSON: Format data yang kamu gunakan untuk mengirim pesan antara UI dan server AI.
+
+3. Frontend & UI Design
+
+Tools yang membuat tampilan "WYRA SMART DOCS v1.0" jadi terlihat profesional:
+
+    HTML5 & CSS3: Digunakan untuk membangun struktur dashboard dan mempercantik tampilan chat bubble.
+
+    JavaScript (Vanilla): Kamu gunakan untuk menangani logika kirim pesan, animasi loading dots, dan fetch data ke backend.
+
+    Google Fonts (Inter): Memberikan kesan modern dan bersih pada tipografi web kamu.
+
+4. DevOps & Environment
+
+Skill infrastruktur yang sangat dihargai (terutama untuk target Ausbildung Jerman):
+
+    Git & GitHub: Kamu gunakan untuk version control dan menyimpan repositori Wyrax-SmartDocs-AI.
+
+    Linux (Ubuntu): Sistem operasi "Daily Driver" tempat kamu men-debug seluruh masalah teknis proyek ini.
+
+    Environment Variables (.env): Kamu gunakan untuk menyimpan konfigurasi sistem agar aman dan fleksibel.
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Format,Library Rekomendasi,Alasan
 PDF,PyMuPDF (fitz) atau PyPDF2,Sangat cepat dan stabil untuk ekstraksi teks di Linux/Ubuntu.
 DOCX,python-docx,Standar industri untuk membaca struktur dokumen Word.
