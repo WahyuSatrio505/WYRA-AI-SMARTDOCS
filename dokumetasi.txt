@@ -219,3 +219,19 @@ JUDUL: KELAHIRAN SMARTDOCS V1.0 (SUCCESSFUL RAG INTEGRATION) > Tanggal: 18 Janua
     Hasil Pengujian: AI mampu mengenali konteks dokumen (Lagu "About You") dan merespons via UI WYRA.
 
     Catatan Hardware: Ditemukan bottleneck performa pada CPU i3/8GB RAM; disarankan optimasi resource atau upgrade hardware di masa mendatang.
+
+
+/// cara menjalankan project ini di device lain //////
+
+git clone https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git
+cd WYRA-AI-SMARTDOCS
+
+/// 2. Siapkan "Otak" AI-nya (Ollama)
+Karena SmartDocs 100% lokal...
+ollama run llama3.2
+
+////  3. Bungkus & Rakit Kontainer Docker (Build)
+docker build -t smartdocs-api .
+
+///// 4 nyalakan mesinyaa /// 
+docker run -p 8000:8000 --network="host" smartdocs-api
