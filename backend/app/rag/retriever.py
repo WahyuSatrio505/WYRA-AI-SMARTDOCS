@@ -14,7 +14,7 @@ def get_relevant_context(query: str):
         collection_name="smartdocs_collection"
     )
     
-    docs = db.similarity_search(query, k=3)
+    docs = db.similarity_search(query, k=4)  # Ambil 5 dokumen paling relevan
 
     print("=== DEBUG RETRIEVED DOCS ===")
     print(docs)

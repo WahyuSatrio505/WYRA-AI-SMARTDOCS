@@ -1,39 +1,31 @@
-from langchain_ollama import ChatOllama
+# 1. Gunakan import terbaru agar tidak ada warning kuning lagi
+from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from backend.app.rag.retriever import get_relevant_context, format_context
 
 def generate_answer(query: str):
+    # Ambil konteks dari retriever (ini yang tadi sudah berhasil jalan di terminalmu)
+    docs = get_relevant_context(query)
+    context = format_context(docs)
 
-    
-    # 1. Ambil konteks
-    results = get_relevant_context(query)
-    if not results:
-        return "Maaf, saya tidak menemukan informasi yang relevan di dokumen Anda."
-    
-    context = format_context(results)
+    # 2. Inisialisasi LLM (Gunakan OllamaLLM untuk standar terbaru)
+    # Pastikan variabel ini bernama 'llm'
+    llm = OllamaLLM(
+        model="llama3.2:1b", 
+        temperature=0.1
+    )
 
-    template = """
-    Kamu adalah asisten ahli SmartDocs. Tugasmu adalah menjawab pertanyaan pengguna 
-    HANYA berdasarkan konteks yang diberikan di bawah ini. 
-    Jika jawaban tidak ada di dalam konteks, katakan bahwa kamu tidak tahu.
-
-    KONTEKS:
-    {context}
-
-    PERTANYAAN:
-    {query}
-
-    JAWABAN:
+    # 3. Buat Prompt
+    template = """Kamu adalah asisten pintar SmartDocs yang membantu menjawab pertanyaan berdasarkan dokumen yang sudah dipelajari. jika tidak tahu jawabannya, katakan "Maaf, saya tidak tahu." Jangan buat jawaban sendiri jika tidak ada di konteks. Jawab dengan singkat dan jelas.
+    Konteks: {context}
+    Pertanyaan: {question}
     """
-    
     prompt = ChatPromptTemplate.from_template(template)
-    
 
-    model = ChatOllama(model="llama3.2") 
-    
-    chain = prompt | model
-    
-    # Eksekusi
-    response = chain.invoke({"context": context, "query": query})
-    
-    return response.content
+    # 4. SAMBUNGKAN CHAIN (Pastikan namanya sama: prompt | llm)
+    # Tadi error karena kamu tulis 'prompt | model' padahal variabelnya 'llm'
+    chain = prompt | llm
+
+    # Jalankan
+    response = chain.invoke({"context": context, "question": query})
+    return response

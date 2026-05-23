@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(chat_router, prefix="/api/v1", tags=["Chat"])
 
 # 3. ENDPOINT STATUS (Untuk verifikasi di browser)
+
 @app.get("/")
 async def root():
     return {

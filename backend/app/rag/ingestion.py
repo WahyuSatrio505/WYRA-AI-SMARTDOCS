@@ -12,8 +12,8 @@ def process_text_to_db(text: str, document_name: str):
     # 1. Chunking: Memecah teks panjang jadi potongan kecil
     # chunk_size 1000 karakter dengan overlap 200 agar konteks tidak terputus
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=60,
+        chunk_size=450,
+        chunk_overlap=50,
         length_function=len
     )
     chunks = text_splitter.split_text(text)
