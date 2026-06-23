@@ -2,7 +2,9 @@ from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 import os
 
-CHROMA_PATH = "storage/vectordb"
+# Konfigurasi Path Absolut
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # Mengarah ke folder backend/
+CHROMA_PATH = os.path.join(BASE_DIR, "storage", "vectordb")
 
 def get_relevant_context(query: str):
 

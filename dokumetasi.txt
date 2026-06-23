@@ -96,3 +96,33 @@ Sistem Retrieval-Augmented Generation (RAG) bekerja ibarat ujian "Open Book":
 3. LLM bertugas membaca paragraf itu lalu menyusun jawaban akhir untuk user.
 
 Aturan Emas: Jika informasi jawaban TIDAK ADA di dalam dokumen yang diunggah, maka LLM tidak akan bisa menjawabnya. Sistem prompt kita dirancang untuk melarang AI "mengarang" (halusinasi) demi menjaga integritas data perusahaan.
+
+
+=========================================================
+
+
+Pindah kembali ke kamar utama (main):
+    Bash
+
+    git checkout main
+
+=========================================
+
+Tarik data terbaru dari GitHub (Pencegahan bentrok):
+Bash
+
+git pull origin main
+
+========================================
+
+Gabungkan branch frontend ke main:
+Bash
+
+git merge wyra
+
+=======================================
+
+Push hasil gabungan ke GitHub:
+Bash
+
+git push origin main
