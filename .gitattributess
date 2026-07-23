@@ -1,0 +1,8 @@
+# Sembunyikan semua file CSS di folder mana pun
+**/*.css linguist-vendored
+
+# Sembunyikan semua file HTML di folder mana pun
+**/*.html linguist-vendored
+
+# Sembunyikan semua file JavaScript di folder mana pun
+**/*.js linguist-vendored
