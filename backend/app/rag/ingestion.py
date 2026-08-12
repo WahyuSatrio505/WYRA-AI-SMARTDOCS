@@ -3,8 +3,9 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 
-# Konfigurasi Path
-CHROMA_PATH = "storage/vectordb"
+# Konfigurasi Path Absolut
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # Mengarah ke folder backend/
+CHROMA_PATH = os.path.join(BASE_DIR, "storage", "vectordb")
 
 def process_text_to_db(text: str, document_name: str):
     """Proses teks mentah masuk ke database vektor"""
@@ -12,11 +13,14 @@ def process_text_to_db(text: str, document_name: str):
     # 1. Chunking: Memecah teks panjang jadi potongan kecil
     # chunk_size 1000 karakter dengan overlap 200 agar konteks tidak terputus
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=60,
+        chunk_size=1000,
+        chunk_overlap=200,
         length_function=len
     )
     chunks = text_splitter.split_text(text)
+    
+    if not chunks:
+        raise ValueError("Dokumen PDF kosong atau hanya berisi gambar/hasil scan tanpa teks yang bisa dibaca.")
     
     # 2. Embedding: Menggunakan model lokal lewat Ollama
     # Pastikan kamu sudah 'ollama pull llama3.2' atau model embedding lainnya

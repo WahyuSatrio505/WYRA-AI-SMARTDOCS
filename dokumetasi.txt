@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 =========================================================
       DOKUMENTASI WYRA AI - SMART DOCS v1.0
 =========================================================
@@ -100,3 +101,133 @@ Jika tidak ingin mengatur environment Python secara manual, gunakan Docker:
 2. Jalankan Container (pastikan Ollama Host sudah running):
    docker run -p 8000:8000 --network="host" smartdocs-api
 =========================================================
+=======
+======================================================
+     WYRA AI SMARTDOCS v1.0 - DOKUMENTASI PROYEK
+======================================================
+
+1. ARSITEKTUR FOLDER LOKAL
+------------------------------------------------------
+smartdocs/
+├── backend/
+│   ├── app/
+│   │   ├── api/                 # FastAPI routes (upload.py, chat.py)
+│   │   ├── core/                # Konfigurasi & dependency (config.py, ollama.py)
+│   │   ├── rag/                 # 🔥 JANTUNG PROYEK (ingestion, retriever, generator, prompts)
+│   │   ├── loaders/             # PDF, DOCX, Excel loaders
+│   │   └── main.py              # Entry point FastAPI
+│   └── requirements.txt
+├── storage/
+│   ├── raw_docs/                # Tempat menyimpan file PDF/DOCX asli
+│   ├── processed_docs/          # Chunks yang sudah diproses (opsional)
+│   └── vectordb/                # Database vektor permanen (ChromaDB)
+├── frontend/                    # UI React (Vite)
+├── docker-compose.yml
+└── README.md
+
+
+2. TECH STACK UTAMA
+------------------------------------------------------
+[ AI & RAG Workflow ]
+- LangChain           : Framework/Orkestrator penghubung dokumen dengan Ollama.
+- Ollama              : Engine lokal untuk menjalankan LLM (Llama 3.2 1B) tanpa internet.
+- ChromaDB            : Database Vektor (Vector Store) tempat menyimpan "ingatan" dokumen.
+- Nomic Embed Text    : Model embedding (mengubah teks jadi vektor agar dipahami mesin). Sangat ringan dan akurat.
+
+[ Ekstraksi Dokumen ]
+- PyMuPDF (fitz)      : Parser ekstraksi teks PDF (sangat cepat & stabil di Linux).
+- python-docx         : Parser untuk membaca struktur dokumen Word.
+- pandas + openpyxl   : Parser untuk merubah tabel Excel menjadi Markdown/String.
+
+[ Software & Backend ]
+- FastAPI & Uvicorn   : Framework API Python super cepat (berjalan di port 8000).
+
+[ Frontend & UI ]
+- React (Vite)        : Antarmuka utama aplikasi (Landing Page & Dashboard Chat).
+- Framer Motion       : Library animasi untuk interaksi UI modern.
+
+
+3. PANDUAN MENJALANKAN PROYEK LOKAL
+------------------------------------------------------
+A. Nyalakan Mesin AI (Ollama) -- WAJIB
+   Buka terminal, jalankan:
+   $ ollama serve
+   (Cek dengan `ollama list` untuk memastikan model llama3.2 dan nomic-embed-text tersedia).
+
+*** PENTING UNTUK BACKEND & INGESTION ***
+Setiap kali membuka terminal baru untuk menjalankan kode Python, WAJIB aktifkan environment:
+$ source venv/bin/activate
+*****************************************
+
+B. Memasukkan Data Dokumen ke AI (Ingestion)
+   Masukkan file PDF/DOCX ke dalam folder `storage/raw_docs/`.
+   Buka terminal di folder root, aktifkan venv, lalu jalankan:
+   $ python3 run_ingest.py
+   (Catatan: Jika Anda ingin mereset/menghapus memori database lama, jalankan: `rm -rf storage/vectordb/` sebelum ingestion).
+
+C. Nyalakan Backend (FastAPI)
+   Buka terminal baru di folder root, aktifkan venv, lalu jalankan:
+   $ python3 -m uvicorn main:app --app-dir backend/app --reload
+   (API akan berjalan secara asinkron di http://127.0.0.1:8000).
+
+D. Nyalakan Frontend (React UI)
+   Buka terminal baru, arahkan ke folder frontend:
+   $ cd frontend
+   $ npm run dev
+   (Buka tautan localhost seperti http://localhost:5173 di browser Anda).
+
+
+4. PANDUAN DEPLOYMENT (DOCKER / DEVICE LAIN)
+------------------------------------------------------
+1. Clone Repositori:
+   $ git clone https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git
+   $ cd WYRA-AI-SMARTDOCS
+
+2. Persiapkan Ollama:
+   $ ollama run llama3.2
+   $ ollama pull nomic-embed-text
+
+3. Build & Run Kontainer Docker:
+   $ docker build -t smartdocs-api .
+   $ docker run -p 8000:8000 --network="host" smartdocs-api
+
+
+5. CATATAN PENTING CARA KERJA SISTEM RAG
+------------------------------------------------------
+Sistem Retrieval-Augmented Generation (RAG) bekerja ibarat ujian "Open Book":
+1. Saat user bertanya, sistem Retriever (Nomic-Embed) akan mencari paragraf/halaman yang paling relevan dari dalam VectorDB.
+2. Paragraf yang ditemukan tersebut akan diberikan kepada LLM (Llama 3.2 1B).
+3. LLM bertugas membaca paragraf itu lalu menyusun jawaban akhir untuk user.
+
+Aturan Emas: Jika informasi jawaban TIDAK ADA di dalam dokumen yang diunggah, maka LLM tidak akan bisa menjawabnya. Sistem prompt kita dirancang untuk melarang AI "mengarang" (halusinasi) demi menjaga integritas data perusahaan.
+
+
+=========================================================
+
+
+Pindah kembali ke kamar utama (main):
+    Bash
+
+    git checkout main
+
+=========================================
+
+Tarik data terbaru dari GitHub (Pencegahan bentrok):
+Bash
+
+git pull origin main
+
+========================================
+
+Gabungkan branch frontend ke main:
+Bash
+
+git merge wyra
+
+=======================================
+
+Push hasil gabungan ke GitHub:
+Bash
+
+git push origin main
+>>>>>>> wyra
