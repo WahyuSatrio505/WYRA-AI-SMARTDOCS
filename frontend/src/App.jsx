@@ -39,7 +39,7 @@ function App() {
     setSystemStatus('retrieving'); // 1. Minta ke Vector Store
 
     try {
-      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+      const API_BASE_URL = localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
       const response = await fetch(`${API_BASE_URL}/api/v1/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

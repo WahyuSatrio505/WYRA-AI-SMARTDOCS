@@ -5,6 +5,7 @@ export default function SettingsModal({ isOpen, onClose, onClearChat, onClearDat
   const [temperature, setTemperature] = useState(0.2);
   const [maxTokens, setMaxTokens] = useState(512);
   const [systemPrompt, setSystemPrompt] = useState("Anda adalah Wyra AI, asisten dokumen yang cerdas dan teliti.");
+  const [apiUrl, setApiUrl] = useState(localStorage.getItem('api_url') || '');
 
   if (!isOpen) return null;
 
@@ -77,6 +78,18 @@ export default function SettingsModal({ isOpen, onClose, onClearChat, onClearDat
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-main)', color: 'var(--text-primary)', resize: 'vertical', minHeight: '80px', fontSize: '0.9rem' }}
                 />
               </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>API Endpoint URL (Cloudflare/Localtunnel)</label>
+                <input 
+                  type="text"
+                  placeholder="https://xxxxx.trycloudflare.com"
+                  value={apiUrl}
+                  onChange={(e) => setApiUrl(e.target.value)}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-main)', color: 'var(--text-primary)', fontSize: '0.9rem' }}
+                />
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>Kosongkan untuk menggunakan URL default dari server (127.0.0.1:8000).</p>
+              </div>
             </div>
 
             <div style={{ marginBottom: '1rem' }}>
@@ -107,7 +120,10 @@ export default function SettingsModal({ isOpen, onClose, onClearChat, onClearDat
           {/* Footer */}
           <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid var(--border)', backgroundColor: 'var(--bg-main)', display: 'flex', justifyContent: 'flex-end' }}>
             <button 
-              onClick={onClose}
+              onClick={() => {
+                localStorage.setItem('api_url', apiUrl);
+                onClose();
+              }}
               style={{ padding: '0.75rem 1.5rem', backgroundColor: 'var(--accent)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}
             >
               Simpan & Tutup
