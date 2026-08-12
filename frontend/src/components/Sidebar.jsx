@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, onOpenSettings }) {
+export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, onOpenSettings, isOpen, onClose }) {
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const [activeDoc, setActiveDoc] = useState(null);
@@ -82,8 +82,16 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
   };
 
   return (
-    <aside className="sidebar">
-      <div className="new-chat-btn" onClick={onNewChat} style={{ marginBottom: '1rem' }}>
+    <>
+      {isOpen && (
+        <div 
+          className="sidebar-overlay"
+          onClick={onClose}
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 40 }}
+        />
+      )}
+      <aside className={`sidebar ${isOpen ? 'mobile-open' : ''}`}>
+        <div className="new-chat-btn" onClick={() => { onNewChat(); onClose(); }} style={{ marginBottom: '1rem' }}>
         <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path d="M12 5v14M5 12h14"></path>
         </svg>
@@ -194,5 +202,6 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
         </div>
       </div>
     </aside>
+    </>
   )
 }

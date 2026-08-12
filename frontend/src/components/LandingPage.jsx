@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import './LandingPage.css';
 
 export default function LandingPage({ onEnterChat }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const fadeUpVariant = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -35,10 +36,22 @@ export default function LandingPage({ onEnterChat }) {
           </svg>
           WYRA AI
         </div>
-        <div className="landing-nav-links">
-          <a href="#about">Tentang</a>
-          <a href="#creator">Kreator</a>
-          <a href="#challenges">Tantangan</a>
+        
+        <button 
+          className="hamburger-btn" 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? (
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          ) : (
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+          )}
+        </button>
+
+        <div className={`landing-nav-links ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+          <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>Tentang</a>
+          <a href="#creator" onClick={() => setIsMobileMenuOpen(false)}>Kreator</a>
+          <a href="#challenges" onClick={() => setIsMobileMenuOpen(false)}>Tantangan</a>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

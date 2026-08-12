@@ -17,6 +17,7 @@ function App() {
   const [showGraph, setShowGraph] = useState(false);
   const [systemStatus, setSystemStatus] = useState('idle'); // 'idle', 'uploading', 'retrieving', 'generating'
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleNewChat = () => {
     setMessages([]);
@@ -78,6 +79,8 @@ function App() {
         onBackHome={() => setCurrentView('landing')} 
         onSystemStatusChange={setSystemStatus} 
         onOpenSettings={() => setIsSettingsOpen(true)}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       
       <div style={{ display: 'flex', flex: 1, width: '100%', overflow: 'hidden' }}>
@@ -88,7 +91,11 @@ function App() {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           style={{ flex: 'none', display: 'flex', flexDirection: 'column' }}
         >
-          <Header showGraph={showGraph} toggleGraph={() => setShowGraph(!showGraph)} />
+          <Header 
+            showGraph={showGraph} 
+            toggleGraph={() => setShowGraph(!showGraph)} 
+            toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          />
 
           {messages.length === 0 && !isLoading ? (
             <WelcomeScreen onSuggestionClick={handleSuggestionClick} />

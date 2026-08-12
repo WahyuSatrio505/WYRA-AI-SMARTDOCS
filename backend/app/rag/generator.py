@@ -28,26 +28,8 @@ def generate_answer(query: str):
     # 4. SAMBUNGKAN CHAIN
     chain = prompt | llm
 
-<<<<<<< HEAD
-    PERTANYAAN:
-    {query}
-
-    JAWABAN:
-    """
-    
-    prompt = ChatPromptTemplate.from_template(template)
-    
-
-    model = ChatOllama(model="llama3.2:1b") 
-    
-    chain = prompt | model
-    
-    # Eksekusi
-    response = chain.invoke({"context": context, "query": query})
-=======
     # Jalankan
     response = chain.invoke({"context": context, "question": query})
->>>>>>> wyra
     
     # Karena ChatOllama mengembalikan objek pesan, ambil isi teksnya saja
     return response.content
