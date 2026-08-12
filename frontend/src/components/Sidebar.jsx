@@ -27,7 +27,8 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
   };
 
   useEffect(() => {
-    const API_BASE_URL = localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+    const rawUrl = localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+    const API_BASE_URL = rawUrl.replace(/\/$/, '');
     fetch(`${API_BASE_URL}/api/v1/document`)
       .then(res => res.json())
       .then(data => {
@@ -58,7 +59,8 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
     formData.append("file", file);
 
     try {
-      const API_BASE_URL = localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+      const rawUrl = localStorage.getItem('api_url') || import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+      const API_BASE_URL = rawUrl.replace(/\/$/, '');
       const response = await fetch(`${API_BASE_URL}/api/v1/upload`, {
         method: "POST",
         body: formData,
