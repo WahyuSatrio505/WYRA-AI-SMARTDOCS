@@ -27,7 +27,8 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
   };
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/v1/document")
+    const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+    fetch(`${API_BASE_URL}/api/v1/document`)
       .then(res => res.json())
       .then(data => {
         if (data && data.document) setActiveDoc(data.document);
@@ -57,7 +58,8 @@ export default function Sidebar({ onNewChat, onBackHome, onSystemStatusChange, o
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/v1/upload", {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+      const response = await fetch(`${API_BASE_URL}/api/v1/upload`, {
         method: "POST",
         body: formData,
       });
