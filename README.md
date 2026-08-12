@@ -7,48 +7,131 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white" />
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
-  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" />
+  <img src="https://img.shields.io/badge/Ollama-black?style=for-the-badge&logo=ollama&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
 </p>
 
 ---
 
-### 🌟 Tentang Proyek
-**Wyrax Smart Docs** adalah platform *Local Knowledge Base* berbasis **RAG (Retrieval-Augmented Generation)** yang dirancang untuk privasi maksimal. Sistem ini memungkinkan kamu untuk "berdiskusi" dengan dokumen PDF secara 100% offline di mesin lokal.
+## 🌟 Tentang Proyek
 
-> "Membangun jembatan antara dokumen statis dan kecerdasan buatan melalui arsitektur RAG berbasis lokal."
+**WYRA Smart Docs** adalah sistem *Knowledge Base* cerdas berbasis arsitektur **RAG (Retrieval-Augmented Generation)**. Sistem ini memungkinkan kamu untuk mengobrol dan "berdiskusi" dengan dokumen-dokumen pribadi kamu (seperti PDF atau DOCX) seolah-olah kamu sedang bertanya kepada asisten pribadi yang sudah membaca seluruh dokumen tersebut.
 
-### 🚀 Fitur Utama
-- **🔒 100% Privacy Focused:** Data tidak pernah meninggalkan perangkat kamu karena berjalan sepenuhnya secara lokal.
-- **🧠 Local LLM Power:** Terintegrasi dengan **Ollama (Llama 3.2)** sebagai otak kecerdasannya.
-- **⚡ Fast Retrieval:** Menggunakan **ChromaDB** sebagai *Vector Store* untuk pencarian konteks yang kilat.
-- **🐳 Dockerized:** Siap dijalankan di mana saja (laptop Advan i3 hingga PC Monster RTX Seri 50) tanpa drama environment.
+### 🔒 Kenapa Dibuat? (Tujuan Utama)
+Tujuan utama proyek ini adalah **PRIVASI MUTLAK**. 
+Di era di mana data sering dikirim ke server cloud perusahaan besar, WYRA Smart Docs dirancang agar **100% aman dan tidak ada satu byte pun data yang keluar dari laptop/device milikmu**. Semua pemrosesan dokumen dan kecerdasan buatan berjalan murni secara lokal di dalam mesin kamu sendiri, sementara antarmuka (UI) bisa diakses dari mana saja secara seamless via cloud.
 
-### 🛠️ Tech Stack
-| Komponen | Teknologi |
+---
+
+## 🏗️ Arsitektur Sistem
+
+Proyek ini menggunakan pendekatan **Hybrid-Deployment**:
+- **Frontend (Cloud):** Antarmuka pengguna di-deploy di **Vercel** agar responsif, cepat, dan mudah diakses dari browser mana pun tanpa membebani laptop.
+- **Backend (Lokal):** Berjalan secara tertutup di laptop/device pengguna sebagai "Mesin" utama yang mengolah instruksi AI dan pencarian di database vektor.
+- **Jembatan Akses:** Menggunakan **Localtunnel** untuk membuka terowongan aman dari internet menuju server lokal.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend & UI
+| Teknologi | Keterangan |
 | --- | --- |
-| **Orchestrator** | ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=chainlink&logoColor=white) |
-| **Backend** | ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi) |
-| **Database** | ![ChromaDB](https://img.shields.io/badge/ChromaDB-FFCC00?style=flat-square&logo=databricks&logoColor=black) |
-| **AI Engine** | ![Ollama](https://img.shields.io/badge/Ollama-black?style=flat-square&logo=ollama&logoColor=white) |
+| **HTML/CSS/JS** | Vanilla, responsif, dengan dark/glassmorphism UI |
+| **Vercel** | Hosting untuk Frontend yang ringan dan cepat |
 
-### 📦 Instalasi & Cara Pakai (Docker)
-1. **Clone Repo**
-   ```bash
-   git clone [https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git](https://github.com/WahyuSatrio505/WYRA-AI-SMARTDOCS.git)
-   cd WYRA-AI-SMARTDOCS
+### Backend & Infrastruktur
+| Teknologi | Keterangan |
+| --- | --- |
+| **FastAPI** | Framework Python berkinerja tinggi untuk melayani API |
+| **Uvicorn** | ASGI server untuk menjalankan FastAPI |
+| **Localtunnel** | Tunnel untuk mengekspos port 8000 lokal ke publik (Vercel) |
 
-   2. Siapkan "Otak" AI (Ollama)
-   Karena SmartDocs berjalan 100% lokal, pastikan Ollama sudah aktif di sistem kamu.
-   ```bash
-   ollama run llama3.2
-   
-   3. Bungkus & Rakit Kontainer Docker (Build)
-   docker build -t smartdocs-api .
+### AI & Data Layer
+| Teknologi | Keterangan |
+| --- | --- |
+| **LangChain** | Orkestrator yang merangkai pipeline AI dan pencarian dokumen |
+| **ChromaDB** | Vector Database untuk menyimpan memori semantik (teks jadi angka) |
+| **Ollama** | Engine lokal untuk mengeksekusi model AI (*Local LLM*) |
+| **nomic-embed-text**| Model embedding untuk mencari konteks dokumen |
+| **llama3.2:1b** | Model utama LLM yang merangkai jawaban berdasarkan konteks |
 
-   4. nyalakan mesinyaa..!!
-   docker run -p 8000:8000 --network="host" smartdocs-api
+---
 
-   5. verivikasi API
-   http://127.0.0.1:8000.
-   dan muncul pesan    {"status": "SmartDocs API sudah berjalan 🚀"}
+## ⚠️ Kekurangan & Keterbatasan
+
+Karena proyek ini mengutamakan privasi dan berjalan 100% di komputer lokal, ada beberapa *trade-off* yang perlu diketahui:
+1. **Model Berskala Kecil:** 
+   Untuk menyesuaikan dengan keterbatasan hardware, sistem ini sengaja menggunakan model **`llama3.2:1b`** (hanya 1 Billion parameters). Meski sangat hemat RAM, model sekecil ini terkadang rentan mengalami *halusinasi* atau kurang mahir menjawab instruksi logika kompleks dibandingkan model raksasa (seperti GPT-4).
+2. **Ketergantungan Hardware (Device-Dependent):**
+   Kecepatan AI berpikir dan mengetikkan jawaban sepenuhnya **bergantung pada kekuatan CPU/GPU laptop milikmu**. Semakin kuat spesifikasi laptopnya, semakin gegas respons AI-nya.
+
+---
+
+## 🚀 Panduan Menjalankan (Sebagai Server Vercel)
+
+Agar laptop kamu bisa berfungsi sebagai "Otak/Mesin" yang melayani website Vercel, jalankan **3 perintah ini secara bersamaan** di 3 terminal berbeda:
+
+### 1. Nyalakan AI Engine
+```bash
+ollama serve
+# Pastikan kamu sudah memiliki model:
+# ollama pull llama3.2:1b
+# ollama pull nomic-embed-text
+```
+
+### 2. Nyalakan Backend Server (FastAPI)
+```bash
+# Aktifkan virtual environment (Sangat disarankan pakai Python 3.11)
+source venv/bin/activate
+
+# Nyalakan server
+python3 -m uvicorn backend.app.main:app --reload
+```
+
+### 3. Buka Terowongan (Localtunnel)
+```bash
+# Mengekspos port 8000 ke Vercel
+npx localtunnel --port 8000 --subdomain wyra-ai-smartdocs
+```
+
+> **Note:** Setelah ketiga terminal menyala, silakan bagikan link Vercel-mu kepada orang lain. Segala pemrosesan dari chat mereka akan dikerjakan langsung oleh laptopmu.
+
+---
+
+## 📂 Struktur Folder Utama
+
+```text
+WYRA-AI-SMARTDOCS/
+├── backend/
+│   └── app/
+│       ├── api/        # Endpoint FastAPI (chat, docs)
+│       ├── core/       # Konfigurasi sistem 
+│       ├── rag/        # Logika Inti RAG (Generator, Ingestion, Retriever)
+│       └── main.py     # Entry point server Uvicorn
+├── frontend/
+│   ├── css/            # File styling (index.css)
+│   ├── js/             # Logika interaktif antarmuka (index.js)
+│   └── index.html      # Tampilan utama web Vercel
+├── storage/
+│   ├── raw_docs/       # 📌 TARUH PDF/DOCX KAMU DI SINI
+│   └── vectordb/       # Database ChromaDB (Memori RAG)
+├── requirements.txt    # Daftar dependency Python
+└── dokumetasi.txt      # Catatan dan setup guide
+```
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+  <strong>Wahyu Satrio Wibowo</strong> <br>
+  Mahasiswa Teknik Informatika<br>
+  
+  [![GitHub](https://img.shields.io/badge/GitHub-WahyuSatrio505-181717?style=flat-square&logo=github)](https://github.com/WahyuSatrio505) <br>
+</div>
+
+<br>
+<p align="center">
+  <i>Dibuat dengan ❤️ untuk privasi maksimal dan eksplorasi kecerdasan buatan.</i> 🚀
+</p>

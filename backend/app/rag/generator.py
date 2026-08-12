@@ -29,7 +29,7 @@ def generate_answer(query: str):
     prompt = ChatPromptTemplate.from_template(template)
     
 
-    model = ChatOllama(model="llama3.2") 
+    model = ChatOllama(model="llama3.2:1b") 
     
     chain = prompt | model
     

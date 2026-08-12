@@ -60,40 +60,37 @@ WYRA-AI-SMARTDOCS/
 7. Konteks yang ditemukan diberikan ke `Llama 3.2` untuk dirangkum menjadi jawaban akhir dan dikirim kembali ke Frontend.
 
 
-4. PANDUAN MENJALANKAN PROJECT (LOCAL SETUP)
+4. PANDUAN MENJALANKAN PROJECT SEBAGAI SERVER VERCEL
 ---------------------------------------------------------
-Jika kamu ingin menjalankan project ini di komputer lokal, ikuti langkah-langkah berikut secara berurutan:
+Agar laptop kamu bisa berfungsi sebagai "Otak/Mesin" yang merespons website yang sudah online di Vercel, kamu WAJIB menyalakan 3 terminal secara bersamaan (jangan di-close terminalnya):
 
-LANGKAH 1: PASTIKAN OLLAMA AKTIF (WAJIB)
-Karena AI berjalan 100% secara lokal, service Ollama harus dihidupkan terlebih dahulu agar proses RAG berjalan lancar.
+🔥 TERMINAL 1: Nyalakan AI Engine (Ollama)
+Pastikan model AI sudah siap melayani permintaan.
 - Buka terminal, jalankan:
   ollama serve
-*(Biarkan terminal ini terbuka)*
+*(Jika Ollama sudah berjalan otomatis di background sistem, langkah ini bisa dilewati).*
 
-LANGKAH 2: AKTIFKAN VIRTUAL ENVIRONMENT
-Buka terminal baru di direktori proyek WYRA-AI-SMARTDOCS, aktifkan virtual environment Python:
-- Di Linux/Mac:
+🔥 TERMINAL 2: Nyalakan Backend Server (FastAPI)
+Ini adalah program yang memproses chat dan mencari dokumen di ChromaDB.
+- Buka terminal baru (pastikan berada di folder WYRAX SMART DOCS), jalankan:
   source venv/bin/activate
-- Di Windows:
-  venv\Scripts\activate
+  python3 -m uvicorn backend.app.main:app --reload
 
-LANGKAH 3: INGEST DOKUMEN (Opsional, Hanya Jika Ada File Baru)
-Jika kamu baru saja menambahkan file PDF/DOCX ke dalam folder `storage/raw_docs/`, jalankan ingestion agar data dikenali sistem:
-- Jalankan perintah:
+🔥 TERMINAL 3: Nyalakan Jembatan Internet (Localtunnel)
+Ini berfungsi membuka jalur agar Vercel bisa masuk ke server localhost kamu.
+- Buka terminal baru lagi, lalu jalankan:
+  npx localtunnel --port 8000 --subdomain wyra-ai-smartdocs
+
+💡 CARA TESTING :
+1. Pastikan Ketiga Terminal di atas menyala bersamaan di laptop kamu.
+2. Kasih link Vercel kamu (misal: https://wyra-ai-smartdocs.vercel.app atau domain eucalabs) ke temanmu.
+3. Saat mereka chat di website tersebut, AI di laptopmu akan otomatis merespons!
+
+---
+(Opsional) INGEST DOKUMEN BARU
+Jika kamu baru menambahkan file PDF/DOCX ke folder `storage/raw_docs/` dan ingin AI membacanya, cukup buka terminal terpisah lalu jalankan:
+  source venv/bin/activate
   python3 backend/app/main.py
-
-LANGKAH 4: JALANKAN API BACKEND (FastAPI)
-Jalankan server API backend agar aplikasi dapat menerima pesan chat dari Frontend:
-- Jalankan perintah:
-  python3 -m uvicorn main:app --app-dir backend/app --reload
-
-💡 Akses Backend:
-- Server Backend berjalan di: http://127.0.0.1:8000
-- Swagger/Dokumentasi API: http://127.0.0.1:8000/docs
-
-LANGKAH 5: JALANKAN FRONTEND
-- Untuk mencoba UI secara lokal, kamu bisa langsung menjalankan file `frontend/index.html` menggunakan Live Server (ekstensi VS Code).
-- Jika UI diakses dari Vercel, pastikan endpoint URL `fetch()` pada file JS mengarah ke alamat backend yang terekspos (misalnya menggunakan Ngrok/localtunnel jika ingin backend lokal dapat diakses Frontend Vercel, ATAU ganti ke domain backend cloud mu).
 
 ---
 ALTERNATIF: MENJALANKAN MENGGUNAKAN DOCKER
