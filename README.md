@@ -7,8 +7,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" />
   <img src="https://img.shields.io/badge/Ollama-black?style=for-the-badge&logo=ollama&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
 </p>
 
 ---
@@ -26,9 +27,9 @@ Di era di mana data sering dikirim ke server cloud perusahaan besar, WYRA Smart 
 ## 🏗️ Arsitektur Sistem
 
 Proyek ini menggunakan pendekatan **Hybrid-Deployment**:
-- **Frontend (Cloud):** Antarmuka pengguna di-deploy di **Vercel** agar responsif, cepat, dan mudah diakses dari browser mana pun tanpa membebani laptop.
+- **Frontend (Cloud):** Antarmuka pengguna dibangun menggunakan **React & Vite** dan di-deploy di **Vercel** agar responsif, cepat, dan mudah diakses dari browser mana pun tanpa membebani laptop.
 - **Backend (Lokal):** Berjalan secara tertutup di laptop/device pengguna sebagai "Mesin" utama yang mengolah instruksi AI dan pencarian di database vektor.
-- **Jembatan Akses:** Menggunakan **Localtunnel** untuk membuka terowongan aman dari internet menuju server lokal.
+- **Jembatan Akses:** Menggunakan **Cloudflare Tunnel** (`cloudflared`) untuk membuka terowongan aman dari internet menuju server lokal.
 
 ---
 
@@ -37,7 +38,9 @@ Proyek ini menggunakan pendekatan **Hybrid-Deployment**:
 ### Frontend & UI
 | Teknologi | Keterangan |
 | --- | --- |
-| **HTML/CSS/JS** | Vanilla, responsif, dengan dark/glassmorphism UI |
+| **React + Vite** | Framework UI super cepat untuk SPA (Single Page Application) |
+| **Framer Motion** | Animasi modern yang mulus (seperti transisi Sidebar & Graph) |
+| **React Flow** | Untuk visualisasi grafis arsitektur sistem di UI |
 | **Vercel** | Hosting untuk Frontend yang ringan dan cepat |
 
 ### Backend & Infrastruktur
@@ -45,7 +48,7 @@ Proyek ini menggunakan pendekatan **Hybrid-Deployment**:
 | --- | --- |
 | **FastAPI** | Framework Python berkinerja tinggi untuk melayani API |
 | **Uvicorn** | ASGI server untuk menjalankan FastAPI |
-| **Localtunnel** | Tunnel untuk mengekspos port 8000 lokal ke publik (Vercel) |
+| **Cloudflare Tunnel**| Tunnel stabil untuk mengekspos port 8000 lokal ke publik (Vercel) |
 
 ### AI & Data Layer
 | Teknologi | Keterangan |
@@ -62,7 +65,7 @@ Proyek ini menggunakan pendekatan **Hybrid-Deployment**:
 
 Karena proyek ini mengutamakan privasi dan berjalan 100% di komputer lokal, ada beberapa *trade-off* yang perlu diketahui:
 1. **Model Berskala Kecil:** 
-   Untuk menyesuaikan dengan keterbatasan hardware, sistem ini sengaja menggunakan model **`llama3.2:1b`** (hanya 1 Billion parameters). Meski sangat hemat RAM, model sekecil ini terkadang rentan mengalami *halusinasi* atau kurang mahir menjawab instruksi logika kompleks dibandingkan model raksasa (seperti GPT-4).
+   Untuk menyesuaikan dengan keterbatasan hardware laptop, sistem ini sengaja menggunakan model **`llama3.2:1b`** (hanya 1 Billion parameters). Meski sangat hemat RAM, model sekecil ini terkadang rentan mengalami *halusinasi* atau kurang mahir menjawab instruksi logika kompleks dibandingkan model raksasa (seperti GPT-4).
 2. **Ketergantungan Hardware (Device-Dependent):**
    Kecepatan AI berpikir dan mengetikkan jawaban sepenuhnya **bergantung pada kekuatan CPU/GPU laptop milikmu**. Semakin kuat spesifikasi laptopnya, semakin gegas respons AI-nya.
 
@@ -89,13 +92,15 @@ source venv/bin/activate
 python3 -m uvicorn backend.app.main:app --reload
 ```
 
-### 3. Buka Terowongan (Localtunnel)
+### 3. Buka Terowongan (Cloudflare Tunnel)
 ```bash
-# Mengekspos port 8000 ke Vercel
-npx localtunnel --port 8000 --subdomain wyra-ai-smartdocs
+# Mengekspos port 8000 lokal ke internet secara aman
+cloudflared tunnel --url http://localhost:8000
 ```
 
-> **Note:** Setelah ketiga terminal menyala, silakan bagikan link Vercel-mu kepada orang lain. Segala pemrosesan dari chat mereka akan dikerjakan langsung oleh laptopmu.
+> **🔥 PENTING UNTUK VERCEL:** 
+> Setelah `cloudflared` jalan, akan muncul URL seperti `https://xxxx.trycloudflare.com`. 
+> Masukkan URL tersebut ke dalam menu **Settings > Environment Variables** di dashboard Vercel kamu dengan nama kunci (key): `VITE_API_URL`. Kemudian tekan tombol **Redeploy** di Vercel.
 
 ---
 
@@ -105,19 +110,22 @@ npx localtunnel --port 8000 --subdomain wyra-ai-smartdocs
 WYRA-AI-SMARTDOCS/
 ├── backend/
 │   └── app/
-│       ├── api/        # Endpoint FastAPI (chat, docs)
-│       ├── core/       # Konfigurasi sistem 
-│       ├── rag/        # Logika Inti RAG (Generator, Ingestion, Retriever)
-│       └── main.py     # Entry point server Uvicorn
+│       ├── api/            # Endpoint FastAPI (chat, upload)
+│       ├── core/           # Konfigurasi sistem 
+│       ├── rag/            # Logika Inti RAG (Generator, Ingestion, Retriever)
+│       └── main.py         # Entry point server Uvicorn
 ├── frontend/
-│   ├── css/            # File styling (index.css)
-│   ├── js/             # Logika interaktif antarmuka (index.js)
-│   └── index.html      # Tampilan utama web Vercel
+│   ├── public/             # Aset statis
+│   ├── src/
+│   │   ├── components/     # Komponen React (Sidebar, App, Modal, dll)
+│   │   ├── App.jsx         # Entry point antarmuka utama
+│   │   └── main.jsx        # Root render Vite
+│   ├── .env.example        # Contoh environment variables (VITE_API_URL)
+│   └── package.json        # Dependencies NodeJS
 ├── storage/
-│   ├── raw_docs/       # 📌 TARUH PDF/DOCX KAMU DI SINI
-│   └── vectordb/       # Database ChromaDB (Memori RAG)
-├── requirements.txt    # Daftar dependency Python
-└── dokumetasi.txt      # Catatan dan setup guide
+│   ├── raw_docs/           # 📌 TARUH PDF/DOCX KAMU DI SINI
+│   └── vectordb/           # Database ChromaDB (Memori RAG)
+└── requirements.txt        # Daftar dependency Python Backend
 ```
 
 ---
