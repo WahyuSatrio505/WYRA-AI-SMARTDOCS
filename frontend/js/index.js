@@ -57,11 +57,14 @@
 
             try {
                 // 3. Tembak API
-                const response = await fetch('https://hoping-facts-sticky-consideration.trycloudflare.com/api/v1/chat', {
+                const response = await fetch('https://wyra-ai-smartdocs.loca.lt/api/v1/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'bypass-tunnel-reminder': 'true'
+                    },
                     body: JSON.stringify({ message: message })
-                });
+                }); 
 
                 const data = await response.json();
                 
